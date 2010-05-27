@@ -36,6 +36,8 @@ Yeni bilgisayarda repo'dan programi cekerek burada kullanmak ve sonra tekrar rep
 10 Tekrar uzak repoya degisiklikleri koy
    git push origin master:master
 
+11 En son degisiklikleri ogrenmek icin:
+   git status
 
 Kurulum ve ilk baslangic icin yapilanlar:
 Once SSH key olusturuldu:

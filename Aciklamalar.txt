@@ -69,3 +69,13 @@ http://piklab.sourceforge.net/
 
 
 http://code.google.com/p/picusb/
+
+
+GIT URL:
+
+http://scottr.org/presentations/git-in-5-minutes/
+
+http://eagain.net/articles/git-for-computer-scientists/
+
+http://www.vogella.de/articles/Git/article.html
+

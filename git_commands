@@ -39,6 +39,8 @@ Yeni bilgisayarda repo'dan programi cekerek burada kullanmak ve sonra tekrar rep
 11 En son degisiklikleri ogrenmek icin:
    git status
 
+Aslinda "checkout" ve "merge" kullanmak daha iyi gibi gorunuyor. Tafsilat URLlerde.
+
 Kurulum ve ilk baslangic icin yapilanlar:
 Once SSH key olusturuldu:
   ssh-keygen -t rsa -C "onat@sabanciuniv.edu"

@@ -1,41 +1,67 @@
-once SSH key olusturuldu:
- 508  ssh-keygen -t rsa -C "onat@sabanciuniv.edu"
-  509  ls
-  510  less id_rsa.pub 
-  511  less id_rsa
-  512  cat > ssh_keygen
-  513  clear
-  514  less id_rsa.pub 
+
+
+Yeni bilgisayarda repo'dan programi cekerek burada kullanmak ve sonra tekrar repo'ya yuklemek icin:
+
+1 ~/.ssh/id_rsa dosasini onat:\tan cek ve yerine koy.
+2 Istenen yerde bir klasor olustur ve burada bir git repo baslat:
+  git init #Bu klasorun icinde .git klasoru olusturur. Bunun icindeki config proje ve uzak repo hakkindaki bilgileri icerir.
+3 Uzak repoyu ve bununla ilintili bilgileri config dosyasina yaz:
+  git config --global user.name ahmetonat
+  git config --global user.email onat@sabanciuniv.edu
+4 Olmus mu test et:
+  ssh git@github.com #Buraya girmek mumkun olmali ama hemen atacaktir.
+5 Repoya dosyalari eklemeye basla:
+  git add <file name1> ...
+6 Yerel repoya bunlari ekle
+  git commit -am 'istedigin belirtici etiket'
+7 Daha sonra istenilen zamanda bunlari uzak repoya yukle:
+  git push origin master:master #origin adli URL'deki sunucuya yerel olarak "master" isimli dali, uzaktaki "master" isimli dala kaynak yap.
+
+...
+
+8 Ileride uzaktan cekip yerelde tekrar islemek istersek once uzaktan cek:
+  git pull origin master  
+  #Anlami:config dosyasinda kayitli URL:origin isimli remote repository'de 
+   bulunan "master" isimli daldan kodu buraya getir.
+  #Ilk denemede basarisiz olabilir, ozellikle o bigisayardaki kaynak kodlari 
+   ve yerel repo varsa ve commit edilmisse. Cekilen kodlar buradaki repo ile 
+   karsilastirilip farklar ve otomatik duzeltilemeyecek hatalar varsa bunlar 
+   gosterilir.
+  #Ilk sefer icin en yeni kaynak hangisiyse onu cekip gelmis olan dosyalarin 
+   uzerine yazabiliriz (remote veya yerel repo'daki).
+9 Yerel olarak commit edilir
+  git commit -am 'o degisikligin ozelligini belirten etiket' 
+  #6 ile ayni.
+  #-a degisikligi simdi yap anlaminda.
+10 Tekrar uzak repoya degisiklikleri koy
+   git push origin master:master
+
+
+Kurulum ve ilk baslangic icin yapilanlar:
+Once SSH key olusturuldu:
+  ssh-keygen -t rsa -C "onat@sabanciuniv.edu"
 
 Sonra git repository github.com'dan giris yapilarak olusturuldu.
 Kullanici adi: ahmetonat
 Sifre: 123abc
 Sonra ekteki koumutlarla ilk yukleme yapildi:
- 520  sudo apt-get install git-core
-  521  cd elektronik/USB/Pic
-  522  cd elektronik/USB/Picdem/
-  523  ls
-  524  git config --global user.name ahmetonat
-  525  git config --global user.email onat@sabanciuniv.edu
-  526  ssh git@github.com
-  527  git init
-  528  ls
-  529  git add *.c
-  530  git commit -am 'First Commit'
-  531  git push origin master
-  532  git push picdem master
-  533  git remote add origin git@github.com:ahmetonat/picdem.git
-  534  git push origin master
+  sudo apt-get install git-core
+  cd elektronik/USB/Picdem/
+  git config --global user.name ahmetonat
+  git config --global user.email onat@sabanciuniv.edu
+  ssh git@github.com
+  git init
+  git add *.c
+  git commit -am 'First Commit'
+  git remote add origin git@github.com:ahmetonat/picdem.git
+  git push origin master
 
-En son da github.com'dan kullanici hesabindan kaynak kodu goruntulenebildi.
+En sonunda github.com'dan kullanici hesabindan kaynak kodu goruntulenebildi.
 
+<OBSOLETE!>
 Yeni dosyalari commit edebilmek icin:
 git clone git://github.com/ahmetonat/picdem.git
 Bu komut ./picdem klasoru olusturup sunucudan dosyalari cekiyor.
 Sonra degisiklikler yapip tekrar yerine koyulacak:
 git add  Ilk kerede yeterli. Yeni dosyalar olusturunca onlari da eklemek gerekli.
-git commit -am "mesajimiz"
-git push 
-git remote add origin git@github.com:ahmetonat/picdem.git
-git push origin master
-Bu anda hersey yeni sunucuya gitmis olur. Ayni rsa dosyalarini butun bilgisayarlara da kopyala...
+

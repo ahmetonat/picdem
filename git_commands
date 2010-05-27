@@ -1,0 +1,41 @@
+once SSH key olusturuldu:
+ 508  ssh-keygen -t rsa -C "onat@sabanciuniv.edu"
+  509  ls
+  510  less id_rsa.pub 
+  511  less id_rsa
+  512  cat > ssh_keygen
+  513  clear
+  514  less id_rsa.pub 
+
+Sonra git repository github.com'dan giris yapilarak olusturuldu.
+Kullanici adi: ahmetonat
+Sifre: 123abc
+Sonra ekteki koumutlarla ilk yukleme yapildi:
+ 520  sudo apt-get install git-core
+  521  cd elektronik/USB/Pic
+  522  cd elektronik/USB/Picdem/
+  523  ls
+  524  git config --global user.name ahmetonat
+  525  git config --global user.email onat@sabanciuniv.edu
+  526  ssh git@github.com
+  527  git init
+  528  ls
+  529  git add *.c
+  530  git commit -am 'First Commit'
+  531  git push origin master
+  532  git push picdem master
+  533  git remote add origin git@github.com:ahmetonat/picdem.git
+  534  git push origin master
+
+En son da github.com'dan kullanici hesabindan kaynak kodu goruntulenebildi.
+
+Yeni dosyalari commit edebilmek icin:
+git clone git://github.com/ahmetonat/picdem.git
+Bu komut ./picdem klasoru olusturup sunucudan dosyalari cekiyor.
+Sonra degisiklikler yapip tekrar yerine koyulacak:
+git add  Ilk kerede yeterli. Yeni dosyalar olusturunca onlari da eklemek gerekli.
+git commit -am "mesajimiz"
+git push 
+git remote add origin git@github.com:ahmetonat/picdem.git
+git push origin master
+Bu anda hersey yeni sunucuya gitmis olur. Ayni rsa dosyalarini butun bilgisayarlara da kopyala...

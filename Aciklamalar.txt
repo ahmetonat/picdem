@@ -79,3 +79,6 @@ http://eagain.net/articles/git-for-computer-scientists/
 
 http://www.vogella.de/articles/Git/article.html
 
+http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html #Bu iyi!
+
+http://www.kernel.org/pub/software/scm/git/docs/v1.2.6/tutorial.html #iyi!

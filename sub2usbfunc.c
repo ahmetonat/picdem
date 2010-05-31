@@ -38,6 +38,9 @@ http://www.varxec.net/picdem_fs_usb/
 Now the code works with Win32. Tested on Windows XP SP2.
 
 */
+
+
+
 #include <usb.h> /* libusb header */
 #include <stdio.h>
 #include <string.h>
@@ -70,18 +73,33 @@ Now the code works with Win32. Tested on Windows XP SP2.
 #define	POKE		0x4C
 #define	PEEK		0x4D //AO
 
-
 /* PICDEM FS USB max packet size is 64-bytes */
 const static int reqLen=64;
 //typedef unsigned char byte;
 typedef char byte;
+
 
 /*** Extern declarations of USB comm functions ***/
 extern void bad(const char *why);
 //extern void send_usb(struct usb_dev_handle *, int, const char *);
 extern void send_usb(struct usb_dev_handle *, int, byte *);
 extern void recv_usb(struct usb_dev_handle * d, int len, byte * dest);
-struct usb_dev_handle *usb_picdem_fs_usb_open(void);
+
+
+
+
+// Local function declarations.
+void picdem_fs_usb_read_version(struct usb_dev_handle * d);
+int setPWM (unsigned char motor_no, int PWM_value, struct usb_dev_handle * USB_handle);
+int readADC (unsigned char channel, struct usb_dev_handle * USB_handle); 
+int writeLCD(char * buffer, byte length, struct usb_dev_handle * USB_handle); 
+int buzz (unsigned char duration, struct usb_dev_handle * USB_handle);
+void picdem_fs_usb_led(struct usb_dev_handle * d, int lednum, int onoff);
+void picdem_fs_usb_reset(struct usb_dev_handle * d);
+
+
+
+
 /************************************************/
 
 void picdem_fs_usb_read_version(struct usb_dev_handle * d)
@@ -94,15 +112,10 @@ void picdem_fs_usb_read_version(struct usb_dev_handle * d)
    recv_usb(d, 2+READ_VERSION_LEN, resp);
    if( (int)resp[0] == READ_VERSION && (int)resp[1] == READ_VERSION_LEN )
     printf("USB firmware stack version is %d.%d\n",(int)resp[3],(int)resp[2]);
-}
-
-
-
-
+}  //END: Read version.
 /****************************************************************************/ 
 
 
-//int setPWM (unsigned char motor_no, int PWM_value, HANDLE* pipes) 
 int setPWM (unsigned char motor_no, int PWM_value, struct usb_dev_handle * USB_handle) 
 { 
     int RecvLength; 
@@ -161,18 +174,6 @@ int setPWM (unsigned char motor_no, int PWM_value, struct usb_dev_handle * USB_h
     send_usb(USB_handle, SendLength, send_buf);
     recv_usb(USB_handle, RecvLength, receive_buf);
     
-    /*Comm_OK=SendReceivePacket(send_buf,SendLength,receive_buf,&RecvLength,1000,1000,pipes); 
-      if ( Comm_OK== 1) 
-      { 
-      //cout <<"Sent packet" << endl; 
-      } 
-      else 
-      { 
-      cout << "SendReceivePacket failed." << endl; 
-      retval=1; 
-      //cout << "Return code is: " << Comm_OK << endl; 
-      } */    
-    
     /*
     printf ("Buffer value 0= %d\n",(unsigned char)receive_buf[0]);
     printf ("Buffer value 1= %d\n",(unsigned char)receive_buf[1]);
@@ -186,12 +187,9 @@ int setPWM (unsigned char motor_no, int PWM_value, struct usb_dev_handle * USB_h
     } 
     return (retval);        
 } //END: set_PWM
-
-
 /****************************************************************************/ 
 
 
-//int readADC (unsigned char channel, HANDLE* pipes)
 int readADC (unsigned char channel, struct usb_dev_handle * USB_handle) 
 {
     int RecvLength;
@@ -210,17 +208,6 @@ int readADC (unsigned char channel, struct usb_dev_handle * USB_handle)
 
     send_usb(USB_handle, SendLength, send_buf);
     recv_usb(USB_handle, RecvLength, receive_buf);
-    /* Comm_OK=SendReceivePacket(send_buf,SendLength,receive_buf,&RecvLength,1000,1000,pipes);
-    if ( Comm_OK== 1)
-	{
-	   //cout <<"Sent packet" << endl;
-	}
-    else
-    {
-       cout << "SendReceivePacket failed." << endl;
-       //retval=1;
-       //cout << "Return code is: " << Comm_OK << endl;
-       }*/    
     
     errchk=receive_buf[3];
     if (channel != errchk){
@@ -230,11 +217,9 @@ int readADC (unsigned char channel, struct usb_dev_handle * USB_handle)
     retval=(unsigned char)receive_buf[1]*256+(unsigned char)receive_buf[2];
     return (retval);          
 } //END: readADC
-
 /****************************************************************************/
 
 
-//int writeLCD(char * buffer, byte length, HANDLE* pipes)
 int writeLCD(char * buffer, byte length, struct usb_dev_handle * USB_handle) 
 {
     int RecvLength;
@@ -257,18 +242,6 @@ int writeLCD(char * buffer, byte length, struct usb_dev_handle * USB_handle)
 
     send_usb(USB_handle, SendLength, send_buf);
     recv_usb(USB_handle, RecvLength, receive_buf);
-    /*
-    Comm_OK=SendReceivePacket(send_buf,SendLength,receive_buf,&RecvLength,1000,1000,pipes);
-    if ( Comm_OK== 1)
-	{
-	   //cout <<"Sent packet" << endl;
-	}
-    else
-    {
-       cout << "SendReceivePacket failed." << endl;
-       retval=1;
-       //cout << "Return code is: " << Comm_OK << endl;
-       }*/    
     
     errchk=receive_buf[1];
     if (length != errchk){
@@ -277,11 +250,6 @@ int writeLCD(char * buffer, byte length, struct usb_dev_handle * USB_handle)
        }
     return (retval);
 } //END: writeLCD
-
-
-
-
-
 /****************************************************************************/ 
  
  
@@ -301,27 +269,14 @@ int buzz (unsigned char duration, struct usb_dev_handle * USB_handle)
     SendLength=2;                    //5 bytes in the outbound packet. 
     RecvLength=2; 
  
-   /* Comm_OK=SendReceivePacket(send_buf,SendLength,receive_buf,&RecvLength,1000,1000,pipes); 
-    if ( Comm_OK== 1) 
-	{ 
-	   //cout <<"Sent packet" << endl; 
-	} 
-    else 
-    { 
-       cout << "SendReceivePacket failed." << endl; 
-       retval=1; 
-       //cout << "Return code is: " << Comm_OK << endl; 
-    }     
-    */
-
-   send_usb(USB_handle, SendLength, send_buf);
-   recv_usb(USB_handle, RecvLength, receive_buf);
+    send_usb(USB_handle, SendLength, send_buf);
+    recv_usb(USB_handle, RecvLength, receive_buf);
  
     errchk=receive_buf[1]; 
     if (duration != errchk){ 
-       printf("BUZZER: Wrong duration value returned: Requested:%d Returned:%d\n", duration, errchk); 
-       retval=1; 
-       } 
+      printf("BUZZER: Wrong duration value returned: Requested:%d Returned:%d\n", duration, errchk); 
+      retval=1; 
+    } 
     return (retval);           
 } //END: buzz
 /****************************************************************************/ 
@@ -353,48 +308,3 @@ void picdem_fs_usb_reset(struct usb_dev_handle * d)
 } //END: picdem_fs_usb_reset
 /****************************************************************************/ 
 
-
-
-
-int main(int argc, char ** argv) 
-{
-  int PWMval;
-  int i;
-  char sendLCD[60];//Make sure this is long enough to keep all characters!!! 
-
-  struct usb_dev_handle * picdem_fs_usb = usb_picdem_fs_usb_open();
-  
-  PWMval=500;
-  printf ("Set PWM=%d for motor1.\n",PWMval); 
-  setPWM (1,PWMval,picdem_fs_usb); 
-  printf ("Set PWM=%d for motor2.\n",PWMval); 
-  setPWM (2,PWMval,picdem_fs_usb);
-  
-  
-  //buzz(15,picdem_fs_usb);
-  picdem_fs_usb_led(picdem_fs_usb, 3, 1);
-  
-  i=readADC(0,picdem_fs_usb);
-  printf("ADC CH0=%d\n",i);
-  i=readADC(1,picdem_fs_usb);
-  printf("ADC CH1=%d\n",i);
-  i=readADC(2,picdem_fs_usb);
-  printf("ADC CH2=%d\n",i);
-  i=readADC(7,picdem_fs_usb);
-  printf("ADC CH7=%d\n",i);
-  i=(unsigned int)readADC(4,picdem_fs_usb);
-  printf("ADC CH4=%d\n",i);
-
-  printf("Sending string to LCD\n");
-  i=0;
-  sendLCD[0]=0x01; ++i;     
-  //sendLCD[1]=0x0C; ++i;   //This appears as a character due to 
-  // insufficiency of LCD print queue driver on SUBII (AO.'s fault)
-  strcpy(sendLCD+i,"Sabanci Univ."); i=i+13;
-  sendLCD[i]=0xC0;  ++i;
-  strcpy(sendLCD+i,"SUBOARD 2.1"); i=i+11;
-    writeLCD(sendLCD,i,picdem_fs_usb);  
-  
-  usb_close(picdem_fs_usb);
-  return 0;
-}

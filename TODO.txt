@@ -1,0 +1,9 @@
+
+
+En ust seviyede USB detaylari ile ilgili birsey kalmasin.
+Mumkunse handle de olmasin.
+SUBII adinda bir tructure tanimlanabilir ve icinde send length recy length, handle gibi seyler olabilir
+
+SUBII_init seklinde bir fonksiyon olsun. Bu asagida fsub_open fonksiyonunu cagirirsin ve SUBII structuna gereken degerleri atasin.
+
+Uygun header fonksiyonlari olsun.

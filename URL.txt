@@ -1,0 +1,12 @@
+http://www.varxec.net/picdem_fs_usb/
+
+
+
+http://www.microchip.com/forums/tm.aspx?m=106426&mpage=1
+
+Also see:
+http://vasco.gforge.enseeiht.fr/
+http://piklab.sourceforge.net/
+
+
+http://code.google.com/p/picusb/

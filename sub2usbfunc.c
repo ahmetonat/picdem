@@ -44,63 +44,9 @@ Now the code works with Win32. Tested on Windows XP SP2.
 #include <usb.h> /* libusb header */
 #include <stdio.h>
 #include <string.h>
+#include "usblin.h"  //Functions for USB Linux
+#include "sub2.h"    //Functions for SUB2
 
-
-#define READ_VERSION     0x00
-#define READ_VERSION_LEN 0x02
-
-#define ID_BOARD         0x31
-#define UPDATE_LED       0x32
-#define SET_TEMP_REAL    0x33
-#define RD_TEMP          0x34
-#define SET_TEMP_LOGGING 0x35
-#define RD_TEMP_LOGGING  0x36
-#define RD_POT           0x37
-#define RESET            0xFF
-
-#define	BUZZER		0x4B //AO
-#define	SET_PWM		0x41 
-#define	INIT_ADC	0x42
-#define	READ_ADC	0x43
-#define	INIT_DIO	0x44
-#define	SET_DO_BIT	0x45
-#define	SET_DOport	0x46
-#define	READ_DI_BIT	0x47
-#define	READ_DI		0x48
-#define	INIT_LCD	0x49
-#define	PUT_LCD		0x4A
-#define	BUZZER		0x4B
-#define	POKE		0x4C
-#define	PEEK		0x4D //AO
-
-/* PICDEM FS USB max packet size is 64-bytes */
-const static int reqLen=64;
-//typedef unsigned char byte;
-typedef char byte;
-
-
-/*** Extern declarations of USB comm functions ***/
-extern void bad(const char *why);
-//extern void send_usb(struct usb_dev_handle *, int, const char *);
-extern void send_usb(struct usb_dev_handle *, int, byte *);
-extern void recv_usb(struct usb_dev_handle * d, int len, byte * dest);
-
-
-
-
-// Local function declarations.
-void picdem_fs_usb_read_version(struct usb_dev_handle * d);
-int setPWM (unsigned char motor_no, int PWM_value, struct usb_dev_handle * USB_handle);
-int readADC (unsigned char channel, struct usb_dev_handle * USB_handle); 
-int writeLCD(char * buffer, byte length, struct usb_dev_handle * USB_handle); 
-int buzz (unsigned char duration, struct usb_dev_handle * USB_handle);
-void picdem_fs_usb_led(struct usb_dev_handle * d, int lednum, int onoff);
-void picdem_fs_usb_reset(struct usb_dev_handle * d);
-
-
-
-
-/************************************************/
 
 void picdem_fs_usb_read_version(struct usb_dev_handle * d)
 {

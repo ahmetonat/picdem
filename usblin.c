@@ -2,42 +2,15 @@
 #include <usb.h> /* libusb header */
 #include <unistd.h> /* for geteuid */
 #include <stdio.h>
-
-//typedef unsigned char byte;
-typedef char byte;
-
-/* change by Xiaofan */
-/* libusb-win32 requires the correct endpoint address
-   including the direction bits. This is the most important
-   differece between libusb-win32 and libusb.
-*/  
-//const static int endpoint=1; /* first endpoint for everything */
-const static int endpoint_in=0x81; /* endpoint 0x81 address for IN */
-const static int endpoint_out=1; /* endpoint 1 address for OUT */
+#include "sub2.h"   //Definitions for SUBII.
+#include "usblin.h" //Linux USB function declarations.
 
 
-/* PICkit USB values */ /* From Microchip firmware */
-const static int vendorID=0x04d8; // Microchip, Inc
-const static int productID=0x000c; // PICDEM FS USB demo app
-const static int configuration=1; /*  Configuration 1*/
-const static int interface=0;	/* Interface 0 */
-
-const static int timeout=2000; /* timeout in ms */
-
-extern void picdem_fs_usb_read_version(struct usb_dev_handle * d);
-
-//static 
-//void send_usb(struct usb_dev_handle * d, int len, const char * src);
-void send_usb(struct usb_dev_handle * d, int len, byte * src);
-//static 
-void recv_usb(struct usb_dev_handle * d, int len, byte * dest);
-void bad(const char *why);
 
 /****************** Internal I/O Commands *****************/
 
 /** Send this binary string command. */
-//static 
-//void send_usb(struct usb_dev_handle * d, int len, const char * src)
+
 void send_usb(struct usb_dev_handle * d, int len, byte * src)
 {
    int r = usb_bulk_write(d, endpoint_out, (char *)src, len, timeout);

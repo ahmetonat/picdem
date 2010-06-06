@@ -1,20 +1,7 @@
 #include <usb.h> /* libusb header */
 #include <stdio.h>
 #include <string.h>
-
-
-typedef char byte;
-
-/*** Extern declarations for SUBII functions ***/
-extern void picdem_fs_usb_read_version(struct usb_dev_handle * d);
-extern int setPWM (unsigned char, int, struct usb_dev_handle *);
-extern int readADC (unsigned char, struct usb_dev_handle *); 
-extern int writeLCD(char * buffer, byte length, struct usb_dev_handle *); 
-extern int buzz (unsigned char duration, struct usb_dev_handle *);
-extern void picdem_fs_usb_led(struct usb_dev_handle * d, int lednum, int onoff);
-extern void picdem_fs_usb_reset(struct usb_dev_handle * d);
-
-struct usb_dev_handle *usb_picdem_fs_usb_open(void);
+#include "sub2.h"
 
 
 int main(int argc, char ** argv) 

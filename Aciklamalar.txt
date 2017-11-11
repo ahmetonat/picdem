@@ -1,4 +1,6 @@
 
+Musings about the problems encountered during the development of the project. Notes to myself, to remind me of the issues, years after I forget about the details.
+
 Program nedir:
 
 SUBOARDII'nin fonksiyonlarinin USB ve LINUX kurulu bir bilgisayar uzerinden surulebilmesini saglayan bir program.
